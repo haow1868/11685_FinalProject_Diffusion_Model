@@ -1,0 +1,39 @@
+run_name: ddpm
+seed: 42
+data_dir: /content/data/imagenet100_128x128/train
+data_valid: /content/data/imagenet100_128x128/validation
+
+
+mage_size: 64
+batch_size: 16
+num_workers: 4
+num_classes: 100
+num_epochs: 3
+
+learning_rate: 1e-4
+weight_decay: 1e-4
+num_train_timesteps: 1000
+num_inference_steps: 500
+beta_start: 0.0001
+beta_end: 0.01
+beta_schedule: 'cosine'
+
+variance_type: fixed_small
+prediction_type: epsilon
+clip_sample: true
+clip_sample_range: 1.0
+
+unet_in_size: 64
+unet_in_ch: 3
+unet_ch: 64
+unet_num_res_blocks: 1
+unet_ch_mult: [1, 2, 2]
+unet_attn: []
+unet_dropout: 0.0
+
+latent_ddpm: false
+use_cfg: false
+use_ddim: false
+use_vae: false
+
+mixed_precision: fp16

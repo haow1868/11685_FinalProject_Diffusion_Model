@@ -1,0 +1,33 @@
+import torch
+import torch.nn as nn
+import math
+
+class ClassEmbedder(nn.Module):
+    def __init__(self, embed_dim, n_classes=1000, cond_drop_rate=0.1):
+        super().__init__()
+        
+        # TODO: implement the class embeddering layer for CFG using nn.Embedding
+        # Reserve index 0 for unconditional class
+        self.embedding = nn.Embedding(n_classes + 1, embed_dim)
+        self.cond_drop_rate = cond_drop_rate
+        self.num_classes = n_classes
+
+    def forward(self, x):
+        """
+           x : LongTensor of shape (batch,)
+               Contains class indices in [0, n_classes-1].
+        """
+
+        b = x.shape[0]
+
+        # Cond drop during training:
+        # With probability cond_drop_rate, replace class with "unconditional" token
+        if self.training and self.cond_drop_rate > 0:
+            drop_mask = (torch.rand(b, device=x.device) < self.cond_drop_rate)
+            # unconditional class index is n_classes
+            x = x.clone()
+            x[drop_mask] = self.num_classes
+
+        # TODO: get embedding: N, embed_dim
+        c = self.embedding(x)
+        return c
